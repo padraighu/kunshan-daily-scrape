@@ -10,7 +10,14 @@ KEYWORDS = [u'科技', u'创新', u'人才', u'科创', u'科学', u'产业园',
 
 def get_article(url, date):
     #logging.info('GET {}'.format(url))
-    r = requests.get(url)
+    ok = False
+    while not ok:
+        try:
+            r = requests.get(url)
+        except requests.exceptions.ConnectionError as e:
+            logging.error('Encountered ConnectionError, retrying: {}'.format(str(e)))
+        else:
+            ok = True
     r.encoding = 'utf-8'
     soup = BeautifulSoup(r.text, 'html.parser')
     #logging.info('GET OK')
