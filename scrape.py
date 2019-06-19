@@ -19,6 +19,9 @@ def get_article(url, date):
         else:
             ok = True
     r.encoding = 'utf-8'
+    if 'Sorry, Page Not Found' in r.text:
+        logging.info('Article not found')
+        return
     soup = BeautifulSoup(r.text, 'html.parser')
     #logging.info('GET OK')
     content = soup.find('founder-content')
