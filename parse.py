@@ -43,9 +43,11 @@ def to_excel():
     print('Reading from DB...')
     kunshan = pd.read_sql(query, conn, parse_dates=['date'])
     print('done')
-    kunshan = kunshan[['date', 'keywords', 'title', 'url', 'author']]
+    kunshan['num_keywords'] = kunshan.apply(lambda r: r['keywords'].count('|'), axis=1)
+    kunshan = kunshan[kunshan['num_keywords']>1] # filter out entries with only 1 keyword included
+    kunshan = kunshan[['date', 'keywords', 'num_keywords', 'title', 'url', 'author']]
     kunshan['date'] = kunshan['date'].dt.date
-    kunshan.columns = [u'日期', u'包含关键词', u'主题', u'链接', u'作者']
+    kunshan.columns = [u'日期', u'包含关键词', u'关键词数量', u'主题', u'链接', u'作者']
     #print(kunshan)
     conn.close()
     print('Writing to Excel...')
