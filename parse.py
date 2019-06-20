@@ -39,6 +39,9 @@ def to_excel():
     print('Reading from DB...')
     kunshan = pd.read_sql(query, conn, parse_dates=['date'])
     print('done')
+    kunshan = kunshan[['date', 'keywords', 'title', 'url', 'author']]
+    kunshan['date'] = kunshan['date'].dt.date
+    kunshan.columns = [u'日期', u'包含关键词', u'主题', u'链接', u'作者']
     # TODO sort by date
     #print(kunshan)
     conn.close()
