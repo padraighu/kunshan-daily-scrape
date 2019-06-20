@@ -17,10 +17,14 @@ def to_sql():
     print('Detected {} json files under data/, reading...'.format(num_files))
     #print(jsons)
     results = []
+    count = 0
     for j in jsons:
         with open('data/'+j, 'r') as f:
             result = json.load(f)
             f.close()
+        count += 1
+        if count % 1000 == 0:
+            print('Read {} of {}'.format(count, num_files))
         #print(result)
         results.append((result['url'], result['title'], result['date'], result['author'], result['keywords']))
     
@@ -42,7 +46,6 @@ def to_excel():
     kunshan = kunshan[['date', 'keywords', 'title', 'url', 'author']]
     kunshan['date'] = kunshan['date'].dt.date
     kunshan.columns = [u'日期', u'包含关键词', u'主题', u'链接', u'作者']
-    # TODO sort by date
     #print(kunshan)
     conn.close()
     print('Writing to Excel...')
@@ -50,5 +53,8 @@ def to_excel():
     print('done')
 
 if __name__ == "__main__":
-    #to_sql()
-    to_excel()
+    option = input('SQL: 1 \nExcel: 2 > ')
+    if option == '1':
+        to_sql()
+    elif option == '2':
+        to_excel()
