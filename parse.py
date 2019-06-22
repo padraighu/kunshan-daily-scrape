@@ -48,6 +48,7 @@ def to_excel():
     kunshan = kunshan[kunshan['num_keywords']>1] # filter out entries with only 1 keyword included
     kunshan = kunshan[['date', 'keywords', 'num_keywords', 'title', 'url', 'author']]
     kunshan['date'] = kunshan['date'].dt.date
+    kunshan = kunshan.sort_values('date') # sort by date
     kunshan.columns = [u'日期', u'包含关键词', u'关键词数量', u'主题', u'链接', u'作者']
     #print(kunshan)
     conn.close()
