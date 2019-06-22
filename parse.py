@@ -43,6 +43,7 @@ def to_excel():
     print('Reading from DB...')
     kunshan = pd.read_sql(query, conn, parse_dates=['date'])
     print('done')
+    kunshan = kunshan.drop_duplicates('title') # some duplicated articles exist, keep only 1
     kunshan['num_keywords'] = kunshan.apply(lambda r: r['keywords'].count('|'), axis=1)
     kunshan = kunshan[kunshan['num_keywords']>1] # filter out entries with only 1 keyword included
     kunshan = kunshan[['date', 'keywords', 'num_keywords', 'title', 'url', 'author']]
